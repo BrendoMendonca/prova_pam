@@ -191,7 +191,7 @@ plt.grid(True)
 plt.show()
 
 #o k_otimo é escolhido com base na análise visual do gráfico anterior do cotovelo
-k_otimo = 2 
+k_otimo = 7 
 print(f"\nValor de 'k' escolhido a partir do gráfico: {k_otimo}")
 
 #executa o K-Means final com o número de clusters decidido
