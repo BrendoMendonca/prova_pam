@@ -37,6 +37,7 @@ A busca com `GridSearchCV` testou 8 combinações de parâmetros. Devido a falta
 
 Com os melhores parâmetros para o Random Forest, foi realizada uma comparação final entre ele e os outros dois modelos. O F1-Score médio  obtido na validação cruzada por grupo foi:
 
+<img width="430" height="85" alt="image" src="https://github.com/user-attachments/assets/c5db9c79-8b6f-4516-a8bb-7c3d162ff0fd" />
 
 
 A análise dos resultados mostra que o **Random Forest Otimizado foi o modelo com o desempenho superior**, alcançando um F1-Score de aproximadamente **41.6%**. O MLP ficou em segundo lugar, enquanto o K-NN demonstrou maior dificuldade na tarefa, com um score consideravelmente mais baixo e instável (alto desvio padrão).
