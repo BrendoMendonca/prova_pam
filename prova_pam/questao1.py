@@ -1,5 +1,11 @@
 """
-Atividade de Introdução a Inteligência Artificial - UFPB
+PROVA DE PARADIGMAS DE APRENDIZAGEM DE MÁQUINA
+Brendo de Almeida Mendonça
+Questão 1
+
+Carrega os dados de sinais em LIBRAS a partir de arquivos JSON,
+normaliza os pontos-chave para garantir invariância à escala e posição, e extrai
+features estatísticas para representar cada sinal como um vetor numérico
 Análise e Classificação de Sinais em LIBRAS a partir de Keypoints
 
 Este script realiza o pré-processamento dos dados, treina três modelos
@@ -70,14 +76,16 @@ def carregar_e_processar_dados(caminho_csv, caminho_json_folder):
                 dados_json = json.load(f)
 
             todos_keypoints_normalizados = []
-            #itera sobre cada frame do vídeo
+            """itera sobre cada frame do vídeo
+            para cada frame, normalizamos os pontos antes de extrair features
+            """
             for frame in dados_json['frames']:
                 #cria um dicionário para acesso rápido aos keypoints pelo ID
                 keypoints_dict = {kp['id']: kp for kp in frame['keypoints']}
                 
                 #LÓGICA DE NORMALIZAÇÃO
                 """o objetivo é fazer com que o modelo de foque apenas no gesto e ignore a posição e a escala do interprete no vídeo
-                # para isso, foram usados os ombros nos pontos 11 e 12 como referência"""
+                para isso, foram usados os ombros nos pontos 11 e 12 como referência"""
                 if 11 in keypoints_dict and 12 in keypoints_dict:
                     ombro_direito_x, ombro_direito_y = keypoints_dict[11]['x'], keypoints_dict[11]['y']
                     ombro_esquerdo_x, ombro_esquerdo_y = keypoints_dict[12]['x'], keypoints_dict[12]['y']
@@ -193,12 +201,12 @@ grid_search.fit(X, y_encoded, groups=groups)
 
 print("\nAjuste de hiperparâmetros concluído.")
 print(f"Melhores parâmetros para RF: {grid_search.best_params_}")
-print(f"Melhor F1-Score (RF Otimizado): {grid_search.best_score_:.4f}")
+print(f"Melhor F1-Score - RF: {grid_search.best_score_:.4f}")
 
 #definição dos modelos para a comparação final
 modelos_finais = {
     #pega o melhor modelo já encontrado e treinado pelo GridSearchCV
-    "Random Forest Otimizado": grid_search.best_estimator_, 
+    "Random Forest": grid_search.best_estimator_, 
     
     #define os outros dois modelos com seus parâmetros padrão, dentro de um pipeline
     "K-NN": Pipeline([
@@ -218,7 +226,7 @@ previsoes = {}
 print("\nIniciando a avaliação final comparativa dos modelos...")
 for nome, modelo in modelos_finais.items():
     #o score do RF já foi calculado, então foi reutilizado
-    if nome == "Random Forest Otimizado":
+    if nome == "Random Forest":
         scores = [grid_search.best_score_]
     else:
         #para os outros modelos, é executada a validação cruzada para obter o F1-Score
@@ -229,7 +237,7 @@ for nome, modelo in modelos_finais.items():
     #gera as previsões para cada modelo para construir a matriz de confusão
     previsoes[nome] = cross_val_predict(modelo, X, y_encoded, cv=cv_group, groups=groups, n_jobs=-1)
     
-    print(f"  - {nome}: F1-Score Médio = {np.mean(scores):.4f} (Desvio Padrão = {np.std(scores):.4f})")
+    print(f"  - {nome}: F1-Score Médio = {np.mean(scores):.4f}")
 
 
 #APRESENTAÇÃO DOS RESULTADOS FINAIS
